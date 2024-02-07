@@ -21,6 +21,9 @@ var GetTileAt = require('./GetTileAt');
 var CalculateFacesAt = function (tileX, tileY, layer)
 {
     var tile = GetTileAt(tileX, tileY, true, layer);
+    return tile;
+    //msc: memory optimization.
+    /*
     var above = GetTileAt(tileX, tileY - 1, true, layer);
     var below = GetTileAt(tileX, tileY + 1, true, layer);
     var left = GetTileAt(tileX - 1, tileY, true, layer);
@@ -83,6 +86,7 @@ var CalculateFacesAt = function (tileX, tileY, layer)
     }
 
     return tile;
+    */
 };
 
 module.exports = CalculateFacesAt;

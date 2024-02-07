@@ -24,6 +24,9 @@ var ProcessTileSeparationX = require('./ProcessTileSeparationX');
  */
 var TileCheckX = function (body, tile, tileLeft, tileRight, tileBias, isLayer)
 {
+    //msc: memory optimization.
+    return 0;
+    /*
     var ox = 0;
 
     var faceLeft = tile.faceLeft;
@@ -79,6 +82,7 @@ var TileCheckX = function (body, tile, tileLeft, tileRight, tileBias, isLayer)
     }
 
     return ox;
+    */
 };
 
 module.exports = TileCheckX;

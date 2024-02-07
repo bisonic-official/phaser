@@ -26,7 +26,9 @@ var TileIntersectsBody = require('./TileIntersectsBody');
  */
 var SeparateTile = function (i, body, tile, tileWorldRect, tilemapLayer, tileBias, isLayer)
 {
-    var tileLeft = tileWorldRect.left;
+    //msc: memory optimization.
+    return false;
+    /*var tileLeft = tileWorldRect.left;
     var tileTop = tileWorldRect.top;
     var tileRight = tileWorldRect.right;
     var tileBottom = tileWorldRect.bottom;
@@ -109,6 +111,7 @@ var SeparateTile = function (i, body, tile, tileWorldRect, tilemapLayer, tileBia
     }
 
     return (ox !== 0 || oy !== 0);
+    */
 };
 
 module.exports = SeparateTile;

@@ -26,6 +26,8 @@ var defaultFaceColor = new Color(40, 39, 37, 150);
  */
 var RenderDebug = function (graphics, styleConfig, layer)
 {
+    //msc: optimization
+    /*
     if (styleConfig === undefined) { styleConfig = {}; }
 
     // Default colors without needlessly creating Color objects
@@ -70,7 +72,9 @@ var RenderDebug = function (graphics, styleConfig, layer)
             if (tile.faceBottom) { graphics.lineBetween(x, y + th, x + tw, y + th); }
             if (tile.faceLeft) { graphics.lineBetween(x, y, x, y + th); }
         }
+        
     }
+    */
 };
 
 module.exports = RenderDebug;

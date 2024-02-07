@@ -1173,8 +1173,10 @@ var SceneManager = new Class({
         }
         else
         {
-            //  Not actually running?
-            this.start(key, data);
+            scene.sys.resume(data);
+            // Modify by Jesus -> this code cause a crash when moving the scroll up and down as fast as you can on satellite view
+            // Not actually running?
+            // this.start(key, data);
         }
     },
 

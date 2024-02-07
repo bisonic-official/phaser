@@ -199,7 +199,7 @@ var Tile = new Class({
          * @type {boolean}
          * @since 3.0.0
          */
-        this.collideLeft = false;
+        //this.collideLeft = false;
 
         /**
          * Whether the tile should collide with any object on the right side.
@@ -211,7 +211,7 @@ var Tile = new Class({
          * @type {boolean}
          * @since 3.0.0
          */
-        this.collideRight = false;
+        //this.collideRight = false;
 
         /**
          * Whether the tile should collide with any object on the top side.
@@ -223,7 +223,7 @@ var Tile = new Class({
          * @type {boolean}
          * @since 3.0.0
          */
-        this.collideUp = false;
+        //this.collideUp = false;
 
         /**
          * Whether the tile should collide with any object on the bottom side.
@@ -235,7 +235,7 @@ var Tile = new Class({
          * @type {boolean}
          * @since 3.0.0
          */
-        this.collideDown = false;
+        //this.collideDown = false;
 
         /**
          * Whether the tiles left edge is interesting for collisions.
@@ -244,7 +244,7 @@ var Tile = new Class({
          * @type {boolean}
          * @since 3.0.0
          */
-        this.faceLeft = false;
+        //this.faceLeft = false;
 
         /**
          * Whether the tiles right edge is interesting for collisions.
@@ -253,7 +253,7 @@ var Tile = new Class({
          * @type {boolean}
          * @since 3.0.0
          */
-        this.faceRight = false;
+        //this.faceRight = false;
 
         /**
          * Whether the tiles top edge is interesting for collisions.
@@ -262,7 +262,7 @@ var Tile = new Class({
          * @type {boolean}
          * @since 3.0.0
          */
-        this.faceTop = false;
+        //this.faceTop = false;
 
         /**
          * Whether the tiles bottom edge is interesting for collisions.
@@ -271,7 +271,7 @@ var Tile = new Class({
          * @type {boolean}
          * @since 3.0.0
          */
-        this.faceBottom = false;
+        //this.faceBottom = false;
 
         /**
          * Tile collision callback.
@@ -280,7 +280,7 @@ var Tile = new Class({
          * @type {function}
          * @since 3.0.0
          */
-        this.collisionCallback = undefined;
+        //this.collisionCallback = undefined;
 
         /**
          * The context in which the collision callback will be called.
@@ -289,7 +289,7 @@ var Tile = new Class({
          * @type {object}
          * @since 3.0.0
          */
-        this.collisionCallbackContext = this;
+        //this.collisionCallbackContext = this;
 
         /**
          * The tint to apply to this tile. Note: tint is currently a single color value instead of
@@ -309,7 +309,7 @@ var Tile = new Class({
          * @type {object}
          * @since 3.0.0
          */
-        this.physics = {};
+        //this.physics = {};
     },
 
     /**
@@ -348,14 +348,14 @@ var Tile = new Class({
         this.visible = tile.visible;
         this.setFlip(tile.flipX, tile.flipY);
         this.tint = tile.tint;
-        this.rotation = tile.rotation;
+        /*this.rotation = tile.rotation;
         this.collideUp = tile.collideUp;
         this.collideDown = tile.collideDown;
         this.collideLeft = tile.collideLeft;
         this.collideRight = tile.collideRight;
         this.collisionCallback = tile.collisionCallback;
         this.collisionCallbackContext = tile.collisionCallbackContext;
-
+        */
         return this;
     },
 
@@ -600,7 +600,8 @@ var Tile = new Class({
      */
     resetCollision: function (recalculateFaces)
     {
-        if (recalculateFaces === undefined) { recalculateFaces = true; }
+        //msc: memory optimization
+        /*if (recalculateFaces === undefined) { recalculateFaces = true; }
 
         this.collideLeft = false;
         this.collideRight = false;
@@ -620,7 +621,7 @@ var Tile = new Class({
             {
                 this.tilemapLayer.calculateFacesAt(this.x, this.y);
             }
-        }
+        }*/
 
         return this;
     },
@@ -635,11 +636,13 @@ var Tile = new Class({
      */
     resetFaces: function ()
     {
+        //msc: memory optimization
+        /*
         this.faceTop = false;
         this.faceBottom = false;
         this.faceLeft = false;
         this.faceRight = false;
-
+        */
         return this;
     },
 
@@ -664,6 +667,8 @@ var Tile = new Class({
         if (down === undefined) { down = left; }
         if (recalculateFaces === undefined) { recalculateFaces = true; }
 
+        //msc: memory optimization
+        /*
         this.collideLeft = left;
         this.collideRight = right;
         this.collideUp = up;
@@ -673,6 +678,7 @@ var Tile = new Class({
         this.faceRight = right;
         this.faceTop = up;
         this.faceBottom = down;
+        */
 
         if (recalculateFaces)
         {
@@ -699,6 +705,8 @@ var Tile = new Class({
      *
      * @return {this} This Tile object instance.
      */
+    //msc: memory optimization
+    /*
     setCollisionCallback: function (callback, context)
     {
         if (callback === null)
@@ -714,7 +722,7 @@ var Tile = new Class({
 
         return this;
     },
-
+    */
     /**
      * Sets the size of the tile and updates its pixelX and pixelY.
      *
@@ -828,8 +836,11 @@ var Tile = new Class({
      */
     destroy: function ()
     {
+        //msc: memory optimization
+        /*
         this.collisionCallback = undefined;
         this.collisionCallbackContext = undefined;
+        */
         this.properties = undefined;
     },
 
@@ -845,7 +856,9 @@ var Tile = new Class({
 
         get: function ()
         {
-            return (this.collideLeft || this.collideRight || this.collideUp || this.collideDown || (this.collisionCallback !== undefined));
+            //msc: memory optimization
+            return false;
+            //return (this.collideLeft || this.collideRight || this.collideUp || this.collideDown || (this.collisionCallback !== undefined));
         }
 
     },
@@ -862,7 +875,9 @@ var Tile = new Class({
 
         get: function ()
         {
-            return (this.collideLeft || this.collideRight || this.collideUp || this.collideDown);
+            //msc: memory optimization
+            return false;
+            //return (this.collideLeft || this.collideRight || this.collideUp || this.collideDown);
         }
 
     },
@@ -879,7 +894,9 @@ var Tile = new Class({
 
         get: function ()
         {
-            return (this.faceTop || this.faceBottom || this.faceLeft || this.faceRight);
+            //msc: memory optimization
+            return false;
+            //return (this.faceTop || this.faceBottom || this.faceLeft || this.faceRight);
         }
 
     },

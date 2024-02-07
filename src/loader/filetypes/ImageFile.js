@@ -102,7 +102,7 @@ var ImageFile = new Class({
      * @method Phaser.Loader.FileTypes.ImageFile#onProcess
      * @since 3.7.0
      */
-    onProcess: function ()
+    onProcess: async function ()
     {
         this.state = CONST.FILE_PROCESSING;
 
@@ -125,6 +125,20 @@ var ImageFile = new Class({
 
             _this.onProcessError();
         };
+
+        //msc: sorry! looking for a better way to solve it after release, it seems it is a phaser problem
+        let counter = 0;
+        const tries = 120;
+        while (this.xhrLoader.response == null && counter < tries) {
+            await new Promise((r) => setTimeout(r, 500))
+            counter ++;
+        }
+        if(counter == tries){
+            console.error("Error loading image after many retries", this);
+            File.revokeObjectURL(_this.data);
+            _this.onProcessError();
+            return;  
+        }
 
         File.createObjectURL(this.data, this.xhrLoader.response, 'image/png');
     },

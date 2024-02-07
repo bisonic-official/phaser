@@ -23,7 +23,8 @@ var GetTilesWithin = require('./GetTilesWithin');
  */
 var CalculateFacesWithin = function (tileX, tileY, width, height, layer)
 {
-    var above = null;
+    return;
+    /*var above = null;
     var below = null;
     var left = null;
     var right = null;
@@ -53,7 +54,7 @@ var CalculateFacesWithin = function (tileX, tileY, width, height, layer)
                 tile.resetFaces();
             }
         }
-    }
+    }*/
 };
 
 module.exports = CalculateFacesWithin;

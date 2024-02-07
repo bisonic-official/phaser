@@ -176,6 +176,22 @@ var AnimationState = new Class({
         this.timeScale = 1;
 
         /**
+         * Jesus modification fo fix animation desync when there are dropframes.
+         * Time in miliseconds that the first frame of an animation has played.
+         *
+         * You can adjust this value to modify the initial frame timer, in case you want to sync
+         * multiple animations
+         *
+         *
+         *
+         * @name Phaser.Animations.AnimationState#first_frame_time
+         * @type {number}
+         * @default 0
+         * @since 3.50.0
+         */
+        this.first_frame_time = 0;
+
+        /**
          * The frame rate of playback, of the current animation, in frames per second.
          *
          * This value is set when a new animation is loaded into this component and should
@@ -1009,6 +1025,17 @@ var AnimationState = new Class({
     },
 
     /**
+     * Jesus modification fo fix animation desync when there are dropframes.
+     * Modify the start time of an animations.
+     *
+     * @method Phaser.Animations.AnimationState#setFirstFrameTime
+     * @since 3.50.0
+     */
+    setFirstFrameTime: function (time){
+        this.currentAnim.first_frame_time = time;
+    },
+
+    /**
      * Handles the start of an animation playback.
      *
      * @method Phaser.Animations.AnimationState#handleStart
@@ -1017,6 +1044,9 @@ var AnimationState = new Class({
      */
     handleStart: function ()
     {
+        //Jesus modification fo fix animation desync when there are dropframes.
+        this.currentAnim.first_frame_time = Date.now();
+
         if (this.showOnStart)
         {
             this.parent.setVisible(true);
@@ -1507,41 +1537,49 @@ var AnimationState = new Class({
 
                 this.handleStart();
             }
+            //Jesus modification fo fix animation desync when there are dropframes.
+            return;
         }
-        else if (this.accumulator >= this.nextTick)
-        {
-            //  Process one frame advance as standard
+        //Jesus modification fo fix animation desync when there are dropframes.
 
-            if (this.forward)
-            {
-                anim.nextFrame(this);
-            }
-            else
-            {
-                anim.previousFrame(this);
-            }
+        const diference = Date.now() - anim.first_frame_time;
+        const max_frames = anim.frames.length;
 
-            //  And only do more if we're skipping frames and have time left
-            if (this.isPlaying && this._pendingStop === 0 && this.skipMissedFrames && this.accumulator > this.nextTick)
-            {
-                var safetyNet = 0;
+        const correct_frame = Math.floor((diference % (max_frames * (this.nextTick / this.timeScale))) / (this.nextTick / this.timeScale));
+        
+        if(!this.currentFrame){
+            return;
+        }
 
-                do
-                {
-                    if (this.forward)
-                    {
+        let current_frame = this.currentFrame.index - 1;
+
+        let safety_net = 0;
+        if (correct_frame == current_frame) {
+            if (this.repeat == 0) {
+                if (diference > (this.nextTick * max_frames)) {
+                    if (this.forward) {
                         anim.nextFrame(this);
                     }
-                    else
-                    {
+                    else {
                         anim.previousFrame(this);
                     }
-
-                    safetyNet++;
-
-                } while (this.isPlaying && this.accumulator > this.nextTick && safetyNet < 60);
+                }
             }
+            return;
         }
+        do {
+            if (this.forward) {
+                anim.nextFrame(this);
+            }
+            else {
+                anim.previousFrame(this);
+            }
+            if(!this.currentFrame){
+                return;
+            }
+            current_frame = this.currentFrame.index - 1
+            safety_net++;
+        } while (this.isPlaying && current_frame != correct_frame && safety_net < 60);
     },
 
     /**

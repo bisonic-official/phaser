@@ -931,6 +931,9 @@ var WebAudioSound = new Class({
 
         set: function (value)
         {
+            if (this.currentConfig == null) {
+                return;
+            }
             this.currentConfig.volume = value;
             this.volumeNode.gain.setValueAtTime(value, 0);
 

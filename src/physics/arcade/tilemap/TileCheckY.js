@@ -24,6 +24,9 @@ var ProcessTileSeparationY = require('./ProcessTileSeparationY');
  */
 var TileCheckY = function (body, tile, tileTop, tileBottom, tileBias, isLayer)
 {
+    //msc: memory optimization.
+    return 0;
+    /*
     var oy = 0;
 
     var faceTop = tile.faceTop;
@@ -79,6 +82,7 @@ var TileCheckY = function (body, tile, tileTop, tileBottom, tileBias, isLayer)
     }
 
     return oy;
+    */
 };
 
 module.exports = TileCheckY;

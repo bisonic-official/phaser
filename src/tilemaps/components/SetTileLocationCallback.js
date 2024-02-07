@@ -24,12 +24,15 @@ var GetTilesWithin = require('./GetTilesWithin');
  */
 var SetTileLocationCallback = function (tileX, tileY, width, height, callback, callbackContext, layer)
 {
+    //msc: optimization
+    /*
     var tiles = GetTilesWithin(tileX, tileY, width, height, null, layer);
 
     for (var i = 0; i < tiles.length; i++)
     {
         tiles[i].setCollisionCallback(callback, callbackContext);
     }
+    */
 };
 
 module.exports = SetTileLocationCallback;
