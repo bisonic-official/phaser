@@ -92,23 +92,44 @@ var JSONFile = new Class({
      * @method Phaser.Loader.FileTypes.JSONFile#onProcess
      * @since 3.7.0
      */
-    onProcess: function ()
+    onProcess: async function ()
     {
         if (this.state !== CONST.FILE_POPULATED)
         {
             this.state = CONST.FILE_PROCESSING;
-
-            try
-            {
-                var json = JSON.parse(this.xhrLoader.responseText);
+            
+            //msc: sorry! looking for a better way to solve it after release, it seems it is a phaser problem
+            const tries = 120;
+            let counter = 0;
+            while ( (this.xhrLoader.responseText == "" ||  this.xhrLoader.status != 200 || this.xhrLoader.statusText != "OK" 
+                  ||  this.xhrLoader.bytesLoaded != this.xhrLoader.bytesTotal ) && counter < tries ) {
+                await new Promise((r) => setTimeout(r, 500))
+                counter++;
             }
-            catch (e)
-            {
-                console.warn('Invalid JSON: ' + this.key);
 
+            if(counter == tries){
+                console.error('Invalid JSON: ' + this.key, this.xhrLoader.response);
                 this.onProcessError();
+                return;
+            }
 
-                throw e;
+            //msc: sorry! looking for a better way to solve it after release, it seems it is a phaser problem
+            let counter_parse = 0;            
+            while (counter_parse < tries) {
+                try {
+                    var json = JSON.parse(this.xhrLoader.responseText);
+                    break;
+                }
+                catch (e) {
+                    await new Promise((r) => setTimeout(r, 500));
+                    counter_parse++;                    
+                }
+            }
+
+            if(counter_parse == tries){
+                console.error('Invalid JSON: ' + this.key, this.xhrLoader.response);
+                this.onProcessError();
+                return;
             }
 
             var key = this.config;

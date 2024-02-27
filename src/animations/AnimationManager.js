@@ -395,7 +395,7 @@ var AnimationManager = new Class({
      *
      * @return {Phaser.Animations.Animation[]} An array of Animation instances that were successfully created.
      */
-    createFromAseprite: function (key, tags)
+    createFromAseprite: function (key, tags, prefix = "")
     {
         var output = [];
 
@@ -472,7 +472,7 @@ var AnimationManager = new Class({
 
                     //  Create the animation
                     var createConfig = {
-                        key: name,
+                        key: prefix + name,
                         frames: animFrames,
                         duration: totalDuration,
                         yoyo: (direction === 'pingpong')

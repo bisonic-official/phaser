@@ -2091,13 +2091,14 @@ var InputPlugin = new Class({
      *
      * @return {function} A Pixel Perfect Handler for use as a hitArea shape callback.
      */
-    makePixelPerfect: function (alphaTolerance)
+    // msc: extrude for clicking
+    makePixelPerfect: function (alphaTolerance, extrude = 0, extrudeJumps = 1)
     {
         if (alphaTolerance === undefined) { alphaTolerance = 1; }
 
         var textureManager = this.systems.textures;
 
-        return CreatePixelPerfectHandler(textureManager, alphaTolerance);
+        return CreatePixelPerfectHandler(textureManager, alphaTolerance, extrude, extrudeJumps);
     },
 
     /**
@@ -2155,11 +2156,13 @@ var InputPlugin = new Class({
 
             pixelPerfect = GetFastValue(config, 'pixelPerfect', false);
             var alphaTolerance = GetFastValue(config, 'alphaTolerance', 1);
+            var extrude = GetFastValue(config, 'extrude', 0);
+            var extrudeJump = GetFastValue(config, 'extrudeJump', 1);
 
             if (pixelPerfect)
             {
                 hitArea = {};
-                hitAreaCallback = this.makePixelPerfect(alphaTolerance);
+                hitAreaCallback = this.makePixelPerfect(alphaTolerance, extrude, extrudeJump);
             }
 
             //  Still no hitArea or callback?

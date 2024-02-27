@@ -17,11 +17,22 @@
  *
  * @return {function} The new Pixel Perfect Handler function.
  */
-var CreatePixelPerfectHandler = function (textureManager, alphaTolerance)
+//msc: extrude for clicking
+var CreatePixelPerfectHandler = function (textureManager, alphaTolerance, extrude = 0, extrudeJumps = 1)
 {
     return function (hitArea, x, y, gameObject)
-    {
-        var alpha = textureManager.getPixelAlpha(x, y, gameObject.texture.key, gameObject.frame.name);
+    {        
+
+        var alpha = 0.0;        
+        for( let xd =  x - extrude ; xd <=  x + extrude ; xd += extrudeJumps ){
+            for( let yd =  y - extrude ; yd <=  y + extrude ; yd += extrudeJumps ){
+                var temp_alpha = textureManager.getPixelAlpha(xd, yd, gameObject.texture.key, gameObject.frame.name);
+                if(temp_alpha != null){
+                    alpha = Math.max(alpha, temp_alpha);
+                }
+            }
+
+        }        
 
         return (alpha && alpha >= alphaTolerance);
     };

@@ -17,6 +17,9 @@
  */
 var ProcessTileCallbacks = function (tile, sprite)
 {
+    //msc: memory optimization
+    return false;
+    /*
     //  Tile callbacks take priority over layer level callbacks
     if (tile.collisionCallback)
     {
@@ -30,6 +33,7 @@ var ProcessTileCallbacks = function (tile, sprite)
     }
 
     return true;
+    */
 };
 
 module.exports = ProcessTileCallbacks;

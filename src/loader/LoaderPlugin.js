@@ -830,7 +830,11 @@ var LoaderPlugin = new Class({
 
             this.emit(Events.FILE_LOAD, file);
 
-            file.onProcess();
+            try{
+                file.onProcess();
+            }catch(e){
+                console.error(e);
+            }
         }
         else
         {

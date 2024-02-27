@@ -409,7 +409,7 @@ var Tilemap = new Class({
 
         if (!this.scene.sys.textures.exists(key))
         {
-            console.warn('Invalid Tileset Image: ' + key);
+           // console.warn('Invalid Tileset Image: ' + key);
             return null;
         }
 
@@ -419,7 +419,7 @@ var Tilemap = new Class({
 
         if (index === null && this.format === Formats.TILED_JSON)
         {
-            console.warn('No data found for Tileset: ' + tilesetName);
+            //console.warn('No data found for Tileset: ' + tilesetName);
             return null;
         }
 
@@ -583,7 +583,7 @@ var Tilemap = new Class({
      *
      * @return {?Phaser.Tilemaps.TilemapLayer} Returns the new layer was created, or null if it failed.
      */
-    createLayer: function (layerID, tileset, x, y)
+    createLayer: function (layerID, tileset, x, y, isTreeLayer=false)
     {
         var index = this.getLayerIndex(layerID);
 
@@ -604,8 +604,7 @@ var Tilemap = new Class({
         // Check for an associated static or dynamic tilemap layer
         if (layerData.tilemapLayer)
         {
-            console.warn('Tilemap Layer ID already exists:' + layerID);
-            return null;
+            //console.warn('Tilemap Layer ID already exists:' + layerID);
         }
 
         this.currentLayerIndex = index;
@@ -622,8 +621,23 @@ var Tilemap = new Class({
             y = layerData.y;
         }
 
-        var layer = new TilemapLayer(this.scene, this, index, tileset, x, y);
 
+        let tilesetForMapLayer = tileset;
+        if (isTreeLayer) {
+            tilesetForMapLayer = [];
+            for (const newTileset of tileset){
+                if(newTileset){
+                    tilesetForMapLayer.push(Object.assign(
+                        Object.create(
+                            Object.getPrototypeOf(newTileset)
+                        ),
+                        newTileset
+                    ));
+                }
+            };
+        }
+        const layer = new TilemapLayer(this.scene, this, index, tilesetForMapLayer, x, y);
+        
         layer.setRenderOrder(this.renderOrder);
 
         this.scene.sys.displayList.add(layer);
