@@ -123,6 +123,8 @@ var TextureManager = new Class({
      */
     boot: function ()
     {
+        this._pending = 3;
+
         this.on(Events.LOAD, this.updatePending, this);
         this.on(Events.ERROR, this.updatePending, this);
 
@@ -131,8 +133,6 @@ var TextureManager = new Class({
         this.addBase64('__DEFAULT', config.defaultImage);
         this.addBase64('__MISSING', config.missingImage);
         this.addBase64('__WHITE', config.whiteImage);
-
-        this._pending = 3;
 
         this.game.events.once(GameEvents.DESTROY, this.destroy, this);
     },
@@ -418,6 +418,56 @@ var TextureManager = new Class({
             texture = this.create(key, glTexture, width, height);
 
             texture.add('__BASE', 0, 0, 0, width, height);
+
+            this.emit(Events.ADD, key, texture);
+        }
+
+        return texture;
+    },
+
+    /**
+     * Adds a Compressed Texture to this Texture Manager.
+     *
+     * The texture should typically have been loaded via the `CompressedTextureFile` loader,
+     * in order to prepare the correct data object this method requires.
+     *
+     * You can optionally also pass atlas data to this method, in which case a texture atlas
+     * will be generated from the given compressed texture, combined with the atlas data.
+     *
+     * @method Phaser.Textures.TextureManager#addCompressedTexture
+     * @fires Phaser.Textures.Events#ADD
+     * @since 3.60.0
+     *
+     * @param {string} key - The unique string-based key of the Texture.
+     * @param {Phaser.Types.Textures.CompressedTextureData} textureData - The Compressed Texture data object.
+     * @param {object} [atlasData] - Optional Texture Atlas data.
+     *
+     * @return {?Phaser.Textures.Texture} The Texture that was created, or `null` if the key is already in use.
+     */
+    addCompressedTexture: function (key, textureData, atlasData)
+    {
+        var texture = null;
+
+        if (this.checkKey(key))
+        {
+            texture = this.create(key, textureData);
+
+            texture.add('__BASE', 0, 0, 0, textureData.width, textureData.height);
+
+            if (atlasData)
+            {
+                if (Array.isArray(atlasData))
+                {
+                    for (var i = 0; i < atlasData.length; i++)
+                    {
+                        Parser.JSONHash(texture, i, atlasData[i]);
+                    }
+                }
+                else
+                {
+                    Parser.JSONHash(texture, 0, atlasData);
+                }
+            }
 
             this.emit(Events.ADD, key, texture);
         }
