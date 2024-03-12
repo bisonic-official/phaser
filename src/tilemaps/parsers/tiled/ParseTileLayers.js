@@ -64,6 +64,9 @@ var ParseTileLayers = function (json, insertNull){
         var output = [];
         var x = 0;
 
+        const offset_x = GetFastValue(curl, 'offsetx', 0);
+        const offset_y = GetFastValue(curl, 'offsety', 0);
+
         //  Loop through the data field in the JSON. curl.data.length
         for (var k = 0, len = curl.data.length; k < len; k++)
         {
@@ -78,6 +81,9 @@ var ParseTileLayers = function (json, insertNull){
                     // propeties into flipX, flipY and rotation
                     tile.rotation = gidInfo.rotation;
                     tile.flipX = gidInfo.flipped;
+
+                    tile.pixelX+= offset_x;
+                    tile.pixelY+= offset_y;
 
                     row.push(tile);
                 }
